@@ -1,0 +1,16 @@
+﻿@model IcyFireTest.Models.Word
+
+<h2>Add a new sentiment word</h2>
+<form asp-action="create" asp-controller="home">
+    <p>
+        <label asp-for="Text">Text</label><br />
+        <input type="text" asp-for="Text" />
+    </p>
+    <p>
+        <label asp-for="Score">Score</label><br />
+        <input type="number" asp-for="Score" />
+    </p>
+    <p>
+        <input type="submit" value="Save" />
+    </p>
+</form>
