@@ -1,4 +1,4 @@
-﻿@model IEnumerable<IcyFireTest.Models.Word>
+﻿@model IcyFireTest.Models.FilteredWordModel
 
 @{
     ViewData["Title"] = "Lexicon";
@@ -9,13 +9,24 @@
     <p>This tab allows you to control over specific words and their sentiment scores.</p>
 </div>
 
-
-
 <h2>List of the words:</h2>
+<form method="get">
+    <div>
+        <input id="filteredValue" name="filteredValue" type="radio" value="0" />
+        <span>All</span> <br />
+        <input id="filteredValue" name="filteredValue" type="radio" value="1" />
+        <span>Positive</span> <br />
+        <input id="filteredValue" name="filteredValue" type="radio" value="-1" />
+        <span>Negative</span> <br />
+
+        <input type="submit" value="Filter" />
+    </div>
+</form>
+
 <p><a asp-action="Create">Add a new word</a></p>
 <table class="table">
     <tr><th>Word</th><th>Score</th></tr>
-    @foreach (var item in Model)
+    @foreach (var item in Model.Words)
     {
         <tr>
             <td>@item.Text</td>
@@ -24,7 +35,7 @@
                 <a asp-action="Edit" asp-controller="Home" asp-route-id="@item.Id">Edit</a>
             </td>
             <td>
-                <form asp-controller="Home" asp-action="Delete" method="post"  asp-route-id="@item.Id">
+                <form asp-controller="Home" asp-action="Delete" method="post" asp-route-id="@item.Id">
                     <input type="submit" value="Delete" />
                 </form>
             </td>

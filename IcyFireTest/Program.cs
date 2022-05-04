@@ -37,6 +37,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Calculation}/{id?}");
+    pattern: "{controller=Home}/{action=Lexicon}/{id?}");
 
 app.Run();

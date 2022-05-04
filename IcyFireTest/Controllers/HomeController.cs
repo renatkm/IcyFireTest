@@ -16,9 +16,32 @@ namespace IcyFireTest.Controllers
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public  async Task<IActionResult> Lexicon()
+        public async Task<IActionResult> Lexicon(int? filteredValue)
         {
-            return View(await _context.Words.ToListAsync());
+            IQueryable<Word> words = _context.Words;
+
+            if (filteredValue != null && filteredValue  >0)
+            {
+                words = words.Where(w => w.Score>0);
+            }
+
+            if (filteredValue != null && filteredValue < 0)
+            {
+                words = words.Where(w => w.Score < 0);
+            }
+
+            var viewModel = new FilteredWordModel
+            {
+                Words = words.ToList(),
+                FilteredValue = filteredValue ?? 0
+            };
+
+            return View(viewModel);
+        }
+
+        public IActionResult Create()
+        {
+            return View();
         }
 
         [HttpPost]
@@ -26,15 +49,51 @@ namespace IcyFireTest.Controllers
         {
             _context.Words.Add(word);
             await _context.SaveChangesAsync();
+
             return RedirectToAction("Lexicon");
         }
 
-        public async Task<IActionResult> Update(Word word)
+        public async Task<IActionResult> Edit(int? id)
         {
-            _context.Words.Add(word);
+            if (id != null)
+            {
+                Word? word = await _context.Words.FirstOrDefaultAsync(w => w.Id == id);
+
+                if (word != null)
+                {
+                    return View(word);
+                }
+            }
+
+            return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Word word)
+        {
+            _context.Words.Update(word);
             await _context.SaveChangesAsync();
+
             return RedirectToAction("Lexicon");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id != null)
+            {
+                Word? word = await _context.Words.FirstOrDefaultAsync(w => w.Id == id);
+                if (word != null)
+                {
+                    _context.Words.Remove(word);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Lexicon");
+                }
+            }
+
+            return NotFound();
+        }
+
 
         public IActionResult Calculation()
         {

@@ -1,6 +1,22 @@
-﻿@{
+﻿@model IEnumerable<IcyFireTest.Models.CalculationModel>
+
+@{
     ViewData["Title"] = "Calculation";
 }
 <h1>@ViewData["Title"]</h1>
 
 <p>This tab allows you to calculate the overall sentiment score of a document. The document may be entered manually via the input field or uploaded as .txt file.</p>
+
+
+<h3>Enter text for scoring:</h3>
+<form asp-action="AddText" asp-controller="Home" method="post">
+    <input type="text" name="TextContent" /><br>
+</form>
+
+
+<h3>Upload .txt file for scoring</h3>
+<form asp-action="AddFile" asp-controller="Home" method="post" enctype="multipart/form-data">
+    <input type="file" name="FileContent" /><br>
+    <input type="submit" value="Upload" />
+</form>
+
